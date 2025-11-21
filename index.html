@@ -1,592 +1,112 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Análise de Investimentos</title>
+    <title>Dashboard InvestAI</title>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: #fff;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            backdrop-filter: blur(10px);
-        }
-
-        h1 {
-            font-size: 28px;
-            margin-bottom: 5px;
-        }
-
-        .subtitle {
-            font-size: 14px;
-            opacity: 0.8;
-        }
-
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card-title {
-            font-size: 16px;
-            margin-bottom: 15px;
-            opacity: 0.9;
-        }
-
-        .stock-input {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        input {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 5px;
-            font-size: 14px;
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
-        }
-
-        button {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 5px;
-            background: #4CAF50;
-            color: white;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        button:hover {
-            background: #45a049;
-        }
-
-        button:disabled {
-            background: #666;
-            cursor: not-allowed;
-        }
-
-        .btn-danger {
-            background: #f44336;
-        }
-
-        .btn-danger:hover {
-            background: #da190b;
-        }
-
-        .stock-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .stock-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 5px;
-            border-left: 4px solid #4CAF50;
-        }
-
-        .stock-info {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .stock-symbol {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .stock-price {
-            font-size: 24px;
-            color: #4CAF50;
-        }
-
-        .stock-change {
-            font-size: 14px;
-        }
-
-        .positive {
-            color: #4CAF50;
-        }
-
-        .negative {
-            color: #f44336;
-        }
-
-        .recommendation {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-top: 5px;
-        }
-
-        .rec-buy-strong {
-            background: #2e7d32;
-        }
-
-        .rec-buy {
-            background: #4CAF50;
-        }
-
-        .rec-hold {
-            background: #FF9800;
-        }
-
-        .rec-sell {
-            background: #f44336;
-        }
-
-        .rec-sell-strong {
-            background: #c62828;
-        }
-
-        .chart-container {
-            grid-column: 1 / -1;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .loading {
-            text-align: center;
-            padding: 20px;
-            opacity: 0.7;
-        }
-
-        .error {
-            background: rgba(244, 67, 54, 0.2);
-            padding: 15px;
-            border-radius: 5px;
-            border-left: 4px solid #f44336;
-            margin-bottom: 20px;
-        }
-
-        .indicators {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .indicator {
-            text-align: center;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 5px;
-        }
-
-        .indicator-value {
-            font-size: 24px;
-            font-weight: bold;
-            margin-top: 5px;
-        }
-
-        .indicator-label {
-            font-size: 12px;
-            opacity: 0.7;
-        }
-
-        .alerts {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .alert-item {
-            padding: 12px;
-            background: rgba(255, 193, 7, 0.2);
-            border-radius: 5px;
-            border-left: 4px solid #FFC107;
-            font-size: 14px;
-        }
-
-        .export-btn {
-            background: #2196F3;
-            margin-top: 10px;
-        }
-
-        .export-btn:hover {
-            background: #0b7dda;
-        }
-    </style>
+    <link rel="stylesheet" href="Style.css">
 </head>
+
 <body>
-    <div class="container">
-        <header>
-            <h1>📊 Sistema de Análise de Investimentos</h1>
-            <p class="subtitle">Análise em tempo real com IA supervisionada</p>
-        </header>
 
-        <div id="error-container"></div>
+    <div class="layout">
 
-        <div class="dashboard">
-            <div class="card">
-                <h3 class="card-title">Adicionar Ativo</h3>
-                <div class="stock-input">
-                    <input type="text" id="stock-symbol" placeholder="Ex: TSLA, AAPL, PETR4.SA" />
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h1 class="logo">INVEST<span>AI</span></h1>
+
+            <nav>
+                <a class="active">📊 Dashboard</a>
+            </nav>
+        </aside>
+
+        <main class="layoutContent">
+            <!-- Header -->
+            <header class="header">
+                <h2>Dashboard de Investimentos</h2>
+                <p>Análise inteligente com gráficos e IA</p>
+                <button onclick="exportReport()">Baixar Relatorio</button>
+            </header>
+            <!-- Adicionar Ativo -->
+            <section class="card add-stock">
+                <h3>Adicionar Ativo</h3>
+
+                <div class="input-group">
+                    <input type="text" id="stock-input" placeholder="Ex: AAPL, PETR4.SA">
                     <button onclick="addStock()">Adicionar</button>
                 </div>
-                <div id="stock-list" class="stock-list"></div>
-            </div>
 
-            <div class="card">
-                <h3 class="card-title">Recomendações de IA</h3>
-                <div id="recommendations" class="loading">Selecione um ativo...</div>
-            </div>
+                <div id="stock-list"></div>
+            </section>
 
-            <div class="card">
-                <h3 class="card-title">Indicadores Técnicos</h3>
-                <div id="indicators" class="loading">Carregando...</div>
-            </div>
+            <!-- Indicadores Técnicos -->
+            <section class="card indicators">
+                <h3>Indicadores Técnicos</h3>
 
-            <div class="chart-container">
-                <h3 class="card-title">Evolução Histórica</h3>
-                <canvas id="price-chart"></canvas>
-                <button class="export-btn" onclick="exportReport()">📥 Exportar Relatório</button>
-            </div>
-
-            <div class="card">
-                <h3 class="card-title">Alertas de Preço (RF007)</h3>
-                <div class="stock-input">
-                    <input type="text" id="alert-symbol" placeholder="Símbolo" />
-                    <input type="number" id="alert-price" placeholder="Preço alvo" />
-                    <button onclick="setAlert()">Criar Alerta</button>
+                <div class="indicator-grid">
+                    <div class="indicator">
+                        <label>RSI</label>
+                        <strong id="rsi-value">--</strong>
+                    </div>
+                    <div class="indicator">
+                        <label>MACD</label>
+                        <strong id="macd-value">--</strong>
+                    </div>
+                    <div class="indicator">
+                        <label>Média Móvel</label>
+                        <strong id="sma-value">--</strong>
+                    </div>
                 </div>
-                <div id="alerts" class="alerts"></div>
-            </div>
-        </div>
+            </section>
+
+            <!-- Recomendações IA -->
+            <section class="card ai">
+                <h3>Recomendações da IA</h3>
+                <div id="ai-recommendation" class="placeholder">
+                    Selecione um ativo...
+                </div>
+            </section>
+
+            <!-- Gráfico Principal -->
+            <section class="card main-chart">
+                <h3>Histórico de Preços</h3>
+                <canvas id="mainChart"></canvas>
+            </section>
+
+            <!-- Gráfico RSI -->
+            <section class="card rsi-chart">
+                <h3>Gráfico RSI</h3>
+                <canvas id="rsiChart"></canvas>
+            </section>
+
+            <!-- Gráfico MACD -->
+            <section class="card macd-chart">
+                <h3>Gráfico MACD</h3>
+                <canvas id="macdChart"></canvas>
+            </section>
+
+            <!-- Alertas -->
+            <section class="card alerts">
+                <h3>Alertas de Preço</h3>
+
+                <div class="input-group">
+                    <input id="alert-symbol" placeholder="Ativo">
+                    <input id="alert-price" type="number" placeholder="Preço">
+                    <button onclick="setAlert()">Criar</button>
+                </div>
+
+                <div id="alert-list"></div>
+            </section>
+        </main>
+
+
     </div>
 
-    <script>
-        const API_URL = 'http://localhost:5000/api';
-        let stocks = [];
-        let chart = null;
-        let alerts = [];
-
-        // Inicializa o sistema
-        async function init() {
-            loadStocks();
-            loadAlerts();
-            setInterval(updateStockPrices, 10000); // Atualiza a cada 10s (RF001)
-        }
-
-        // Adiciona ativo
-        async function addStock() {
-            const symbol = document.getElementById('stock-symbol').value.trim().toUpperCase();
-            if (!symbol) return;
-
-            if (stocks.includes(symbol)) {
-                showError('Ativo já adicionado!');
-                return;
-            }
-
-            stocks.push(symbol);
-            saveStocks();
-            document.getElementById('stock-symbol').value = '';
-            await updateStockPrices();
-            await loadRecommendations(symbol);
-            await loadChart(symbol);
-        }
-
-        // Atualiza preços
-        async function updateStockPrices() {
-            if (stocks.length === 0) return;
-
-            const listDiv = document.getElementById('stock-list');
-            listDiv.innerHTML = '<div class="loading">Atualizando...</div>';
-
-            try {
-                const response = await fetch(`${API_URL}/batch-quotes`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ symbols: stocks })
-                });
-
-                const data = await response.json();
-                
-                listDiv.innerHTML = '';
-                for (const symbol of stocks) {
-                    const stockData = data[symbol];
-                    if (stockData && !stockData.error) {
-                        const item = document.createElement('div');
-                        item.className = 'stock-item';
-                        item.innerHTML = `
-                            <div class="stock-info">
-                                <div class="stock-symbol">${symbol}</div>
-                                <div class="stock-price">$${stockData.price.toFixed(2)}</div>
-                                <button onclick="loadRecommendations('${symbol}')">Ver Recomendação</button>
-                            </div>
-                            <button class="btn-danger" onclick="removeStock('${symbol}')">Remover</button>
-                        `;
-                        listDiv.appendChild(item);
-                        
-                        checkAlerts(symbol, stockData.price);
-                    }
-                }
-            } catch (error) {
-                showError('Erro ao atualizar preços: ' + error.message);
-            }
-        }
-
-        // Carrega recomendações (RF003)
-        async function loadRecommendations(symbol) {
-            const recDiv = document.getElementById('recommendations');
-            recDiv.innerHTML = '<div class="loading">Analisando...</div>';
-
-            try {
-                const response = await fetch(`${API_URL}/recommendation/${symbol}`);
-                const data = await response.json();
-
-                if (data.error) {
-                    recDiv.innerHTML = `<div class="error">${data.error}</div>`;
-                    return;
-                }
-
-                const recClass = data.recommendation.toLowerCase().replace(/\s+/g, '-');
-                recDiv.innerHTML = `
-                    <div style="text-align: center;">
-                        <h2>${symbol}</h2>
-                        <div class="recommendation rec-${recClass}">${data.recommendation}</div>
-                        <p style="margin-top: 10px; font-size: 18px;">Confiança: ${data.confidence}%</p>
-                        <p style="margin-top: 5px;">Preço: $${data.current_price.toFixed(2)}</p>
-                    </div>
-                    <div style="margin-top: 20px;">
-                        <h4>Sinais Detectados:</h4>
-                        <ul style="list-style: none; padding: 0;">
-                            ${data.signals.map(s => `<li style="padding: 5px 0;">• ${s}</li>`).join('')}
-                        </ul>
-                    </div>
-                `;
-
-                loadIndicators(data);
-                await loadChart(symbol);
-            } catch (error) {
-                showError('Erro ao carregar recomendações: ' + error.message);
-            }
-        }
-
-        // Carrega indicadores (RF006)
-        function loadIndicators(data) {
-            const indDiv = document.getElementById('indicators');
-            indDiv.innerHTML = `
-                <div class="indicators">
-                    <div class="indicator">
-                        <div class="indicator-label">RSI</div>
-                        <div class="indicator-value ${data.rsi < 30 ? 'positive' : data.rsi > 70 ? 'negative' : ''}">${data.rsi.toFixed(2)}</div>
-                    </div>
-                    <div class="indicator">
-                        <div class="indicator-label">MACD</div>
-                        <div class="indicator-value">${data.macd.toFixed(4)}</div>
-                    </div>
-                    <div class="indicator">
-                        <div class="indicator-label">Score</div>
-                        <div class="indicator-value ${data.score > 0 ? 'positive' : data.score < 0 ? 'negative' : ''}">${data.score}</div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Carrega gráfico (RF002)
-        async function loadChart(symbol) {
-            try {
-                const response = await fetch(`${API_URL}/historical/${symbol}?outputsize=compact`);
-                const data = await response.json();
-
-                const timeSeries = data['Time Series (Daily)'];
-                if (!timeSeries) return;
-
-                const dates = Object.keys(timeSeries).reverse().slice(-30);
-                const prices = dates.map(date => parseFloat(timeSeries[date]['4. close']));
-
-                const ctx = document.getElementById('price-chart').getContext('2d');
-                
-                if (chart) chart.destroy();
-
-                chart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: dates,
-                        datasets: [{
-                            label: `${symbol} - Preço de Fechamento`,
-                            data: prices,
-                            borderColor: '#4CAF50',
-                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
-                            tension: 0.4,
-                            fill: true
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: { display: true, labels: { color: '#fff' } }
-                        },
-                        scales: {
-                            x: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
-                            y: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } }
-                        }
-                    }
-                });
-            } catch (error) {
-                showError('Erro ao carregar gráfico: ' + error.message);
-            }
-        }
-
-        // Alertas (RF007)
-        function setAlert() {
-            const symbol = document.getElementById('alert-symbol').value.trim().toUpperCase();
-            const price = parseFloat(document.getElementById('alert-price').value);
-
-            if (!symbol || !price) {
-                showError('Preencha todos os campos do alerta!');
-                return;
-            }
-
-            alerts.push({ symbol, price, active: true });
-            saveAlerts();
-            renderAlerts();
-
-            document.getElementById('alert-symbol').value = '';
-            document.getElementById('alert-price').value = '';
-        }
-
-        function checkAlerts(symbol, currentPrice) {
-            alerts.forEach(alert => {
-                if (alert.active && alert.symbol === symbol) {
-                    if (currentPrice >= alert.price) {
-                        alert.active = false;
-                        showAlert(`🔔 Alerta: ${symbol} atingiu $${alert.price}! Preço atual: $${currentPrice.toFixed(2)}`);
-                        saveAlerts();
-                        renderAlerts();
-                    }
-                }
-            });
-        }
-
-        function renderAlerts() {
-            const alertsDiv = document.getElementById('alerts');
-            if (alerts.length === 0) {
-                alertsDiv.innerHTML = '<div style="opacity: 0.5; padding: 10px;">Nenhum alerta configurado</div>';
-                return;
-            }
-
-            alertsDiv.innerHTML = alerts.map((alert, i) => `
-                <div class="alert-item">
-                    <strong>${alert.symbol}</strong> - Alvo: $${alert.price.toFixed(2)}
-                    <span style="float: right;">${alert.active ? '🟢 Ativo' : '🔴 Disparado'}</span>
-                </div>
-            `).join('');
-        }
-
-        // Exportar relatório (RF004)
-        function exportReport() {
-            const report = {
-                timestamp: new Date().toISOString(),
-                stocks: stocks,
-                alerts: alerts,
-                generated_by: 'Sistema de Análise de Investimentos v1.0'
-            };
-
-            const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `relatorio_${new Date().toISOString().split('T')[0]}.json`;
-            a.click();
-        }
-
-        // Persistência local
-        function saveStocks() {
-            localStorage.setItem('stocks', JSON.stringify(stocks));
-        }
-
-        function loadStocks() {
-            const saved = localStorage.getItem('stocks');
-            if (saved) {
-                stocks = JSON.parse(saved);
-                updateStockPrices();
-            }
-        }
-
-        function removeStock(symbol) {
-            stocks = stocks.filter(s => s !== symbol);
-            saveStocks();
-            updateStockPrices();
-        }
-
-        function saveAlerts() {
-            localStorage.setItem('alerts', JSON.stringify(alerts));
-        }
-
-        function loadAlerts() {
-            const saved = localStorage.getItem('alerts');
-            if (saved) {
-                alerts = JSON.parse(saved);
-                renderAlerts();
-            }
-        }
-
-        function showError(message) {
-            const errorDiv = document.getElementById('error-container');
-            errorDiv.innerHTML = `<div class="error">${message}</div>`;
-            setTimeout(() => errorDiv.innerHTML = '', 5000);
-        }
-
-        function showAlert(message) {
-            alert(message);
-        }
-
-        // Inicia o sistema
-        init();
-    </script>
+    <script src="script.js"></script>
 </body>
+
 </html>
