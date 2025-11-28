@@ -31,38 +31,6 @@
                 <p>Análise inteligente com gráficos e IA</p>
                 <button onclick="exportReport()">Baixar Relatorio</button>
             </header>
-            <!-- Adicionar Ativo -->
-            <section class="card add-stock">
-                <h3>Adicionar Ativo</h3>
-
-                <div class="input-group">
-                    <input type="text" id="stock-input" placeholder="Ex: AAPL, PETR4.SA">
-                    <button onclick="addStock()">Adicionar</button>
-                </div>
-
-                <div id="stock-list"></div>
-            </section>
-
-            <!-- Indicadores Técnicos -->
-            <section class="card indicators">
-                <h3>Indicadores Técnicos</h3>
-
-                <div class="indicator-grid">
-                    <div class="indicator">
-                        <label>RSI</label>
-                        <strong id="rsi-value">--</strong>
-                    </div>
-                    <div class="indicator">
-                        <label>MACD</label>
-                        <strong id="macd-value">--</strong>
-                    </div>
-                    <div class="indicator">
-                        <label>Média Móvel</label>
-                        <strong id="sma-value">--</strong>
-                    </div>
-                </div>
-            </section>
-
             <!-- Recomendações IA -->
             <section class="card ai">
                 <h3>Recomendações da IA</h3>
@@ -76,37 +44,10 @@
                 <h3>Histórico de Preços</h3>
                 <canvas id="mainChart"></canvas>
             </section>
-
-            <!-- Gráfico RSI -->
-            <section class="card rsi-chart">
-                <h3>Gráfico RSI</h3>
-                <canvas id="rsiChart"></canvas>
-            </section>
-
-            <!-- Gráfico MACD -->
-            <section class="card macd-chart">
-                <h3>Gráfico MACD</h3>
-                <canvas id="macdChart"></canvas>
-            </section>
-
-            <!-- Alertas -->
-            <section class="card alerts">
-                <h3>Alertas de Preço</h3>
-
-                <div class="input-group">
-                    <input id="alert-symbol" placeholder="Ativo">
-                    <input id="alert-price" type="number" placeholder="Preço">
-                    <button onclick="setAlert()">Criar</button>
-                </div>
-
-                <div id="alert-list"></div>
-            </section>
         </main>
-
-
     </div>
-
     <script src="script.js"></script>
+    
 </body>
 
 </html>
