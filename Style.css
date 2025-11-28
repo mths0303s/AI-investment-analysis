@@ -1,0 +1,317 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  background: #000;
+  color: #fff;
+}
+
+/* GRID TEMPLATE AREAS */
+.layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  grid-template-rows: auto auto auto auto;
+  grid-template-areas:
+    "sidebar main"
+    "sidebar main"
+    "sidebar main"
+    "sidebar main"
+    "sidebar main";
+}
+.layoutContent {
+  grid-area: main;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto auto auto;
+  grid-template-areas:
+    "header header"
+    "addStock indicators"
+    "ai mainChart"
+    "rsiChart macdChart"
+    "alerts alerts";
+  gap: 20px;
+  padding: 20px;
+}
+/* SIDEBAR */
+.sidebar {
+  grid-area: sidebar;
+  background: #111;
+  padding: 30px 20px;
+  height: 100vh;
+  border-right: 1px solid #222;
+  position: sticky;
+  top: 0;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+}
+.logo span {
+  color: #999;
+}
+
+nav {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+nav a {
+  padding: 10px;
+  color: #aaa;
+  text-decoration: none;
+  border-radius: 6px;
+}
+nav a:hover,
+nav .active {
+  background: #222;
+  color: #fff;
+}
+
+/* HEADER */
+/* HEADER GRID FIX */
+.header {
+  grid-area: header;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* BOTÃO DE DOWNLOAD */
+.download-btn {
+  background: #fff;
+  color: #000;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  transition: 0.2s;
+}
+
+.download-btn:hover {
+  background: #ccc;
+}
+
+/* CARDS */
+.card {
+  background: #111;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #222;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.03);
+}
+
+.add-stock {
+  grid-area: addStock;
+}
+.indicators {
+  grid-area: indicators;
+}
+.ai {
+  grid-area: ai;
+}
+.main-chart {
+  grid-area: mainChart;
+}
+.rsi-chart {
+  grid-area: rsiChart;
+}
+.macd-chart {
+  grid-area: macdChart;
+}
+.alerts {
+  grid-area: alerts;
+}
+
+/* INPUTS */
+.input-group {
+  display: flex;
+  gap: 10px;
+}
+input {
+  flex: 1;
+  background: #000;
+  border: 1px solid #333;
+  padding: 12px;
+  color: white;
+  border-radius: 8px;
+}
+button {
+  background: white;
+  color: black;
+  padding: 12px 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+button:hover {
+  background: #ddd;
+}
+
+/* INDICADORES */
+.indicator-grid {
+  display: flex;
+  gap: 10px;
+}
+.indicator {
+  flex: 1;
+  background: #000;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #222;
+  text-align: center;
+}
+.indicator strong {
+  display: block;
+  font-size: 22px;
+}
+
+/* GRÁFICOS */
+canvas {
+  max-height: 260px;
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "header"
+      "addStock"
+      "indicators"
+      "ai"
+      "mainChart"
+      "rsiChart"
+      "macdChart"
+      "alerts";
+  }
+
+  .sidebar {
+    display: none;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 0px #0f0;
+  }
+  50% {
+    box-shadow: 0 0 8px #0f0;
+  }
+  100% {
+    box-shadow: 0 0 0px #0f0;
+  }
+}
+
+.sidebar {
+  animation: slideInLeft 0.7s ease-out;
+}
+
+.card {
+  animation: fadeInUp 0.6s ease-out;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.08);
+}
+
+.header {
+  animation: fadeIn 1s ease-out;
+}
+
+button {
+  transition: background 0.25s, transform 0.25s;
+}
+
+button:hover {
+  transform: scale(1.05);
+  background: #fff;
+}
+
+/* Efeito “clicado” */
+button:active {
+  transform: scale(0.97);
+}
+
+input:focus {
+  border-color: #08f;
+  box-shadow: 0 0 6px #08f;
+  transition: 0.3s;
+}
+
+.stock-item {
+  animation: fadeInUp 0.5s ease-out;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.stock-item:hover {
+  background: #181818;
+  transform: translateY(-3px);
+}
+
+.alert-item {
+  animation: fadeInUp 0.5s ease-out;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+.alert-item:hover {
+  background: #1b1b1b;
+}
+
+.indicator-value.positive {
+  color: #00ff88;
+  animation: pulseGlow 1.5s infinite;
+}
+
+.indicator-value.negative {
+  color: #ff4444;
+  animation: pulseGlow 1.5s infinite;
+}
+
+canvas {
+  animation: fadeIn 1s ease-out;
+}

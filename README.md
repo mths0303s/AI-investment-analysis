@@ -4,7 +4,7 @@ Sistema desktop para análise de investimentos em tempo real utilizando intelig�
 
 ## 👥 Equipe de Desenvolvimento
 - **Mateus Lima**
-- **Matheus Araújo**
+- **Matheus Araújo** 
 - **Udiel**
 - **Kauã Fernandes**
 - **Orientador:** Prof. Vander
