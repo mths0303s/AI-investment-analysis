@@ -19,7 +19,7 @@
   "author": "Mateus Lima, Matheus Araújo, Udiel, Kauã Fernandes",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^27.0.0",
+    "electron": "^27.3.11",
     "electron-builder": "^24.6.4"
   },
   "dependencies": {

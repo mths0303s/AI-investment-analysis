@@ -2,13 +2,13 @@
 Script de Testes - Sistema de Análise de Investimentos
 Testa todos os requisitos funcionais e não funcionais
 """
-
+# test_script.js
 import requests
 import time
 import json
 from datetime import datetime
 
-API_URL = "http://localhost:5000/api"
+API_URL = "http://localhost:5001/api"
 
 class TestRunner:
     def __init__(self):

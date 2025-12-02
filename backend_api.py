@@ -1,3 +1,4 @@
+# backend_api.py
 """
 Sistema de Análise de Investimentos - Backend API
 Equipe: Mateus Lima, Matheus Araújo, Udiel, Kauã Fernandes
@@ -261,5 +262,6 @@ def get_indicators(symbol):
 
 if __name__ == '__main__':
     print("🚀 Sistema de Análise de Investimentos iniciado")
-    print("📊 API rodando em http://localhost:5000")
-    app.run(debug=True, port=5000)
+    print("📊 API rodando em http://localhost:5001")
+    app.run(debug=True, use_reloader=False, port=5001, host="127.0.0.1")
+

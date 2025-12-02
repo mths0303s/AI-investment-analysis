@@ -23,31 +23,25 @@
                 <a class="active">📊 Dashboard</a>
             </nav>
         </aside>
-
+        <div id="error-container" class="error-box"></div>
         <main class="layoutContent">
             <!-- Header -->
             <header class="header">
                 <h2>Dashboard de Investimentos</h2>
                 <p>🧠 Análise inteligente com gráficos e IA</p>
-                <button onclick="updateReport()" style="margin-right: -18%">Atualizar Relatório</button>
                 <button onclick="exportReport()">Baixar Relatório</button>
             </header>
+            <input type="text" id="stock-symbol" placeholder="Digite o símbolo do ativo">
+            <button onclick="addStock()">Adicionar Ativo</button>
+
             <!-- Recomendações IA -->
             <section class="card ai">
                 <h3>🟢 Recomendações da IA</h3>
-                <div id="ai-recommendation" class="placeholder">
+                <div id="recommendations" class="placeholder">
                     Carregando recomendações...
                 </div>
             </section>
-
-            <!-- Gráfico de Ativos Não Recomendados -->
-            <section class="card main-chart">
-                <h3>🔴 Não Recomendados</h3>
-                <div id="ai-recommendation" class="placeholder">
-                    Carregando recomendações...
-                </div>
-                <canvas id="mainChart"></canvas>
-            </section>
+            <div id="stock-list"></div>
         </main>
     </div>
     <script src="script.js"></script>

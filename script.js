@@ -1,5 +1,5 @@
-
-const API_URL = 'http://localhost:5000/api';
+// Script.js
+const API_URL = 'http://localhost:5001/api';
 let stocks = [];
 let chart = null;
 let alerts = [];
@@ -245,8 +245,11 @@ function loadStocks() {
     if (saved) {
         stocks = JSON.parse(saved);
         updateStockPrices();
+        // Carregar recomendação do primeiro ativo automaticamente
+        if (stocks.length > 0) loadRecommendations(stocks[0]);
     }
 }
+
 
 function removeStock(symbol) {
     stocks = stocks.filter(s => s !== symbol);
